@@ -190,10 +190,18 @@ making this function a convenient way to generate an initial template
 for a manually maintained Texinfo manual. 
 </p></blockquote></div>
 
-   <p><a name="index-generate_002dincludes-3"></a><a name="Function-generate_002dincludes"></a>
+   <p><a name="index-document_002dpackage_002dpathname-3"></a><a name="Function-document_002dpackage_002dpathname"></a>
 
 <div class="defun">
-&mdash; Function: <b>generate-includes</b><var> directory packages &amp;key base-package<a name="index-generate_002dincludes-4"></a></var><br>
+&mdash; Function: <b>document-package-pathname</b><var> package &amp;key output-file &amp;allow-other-keys<a name="index-document_002dpackage_002dpathname-4"></a></var><br>
+<blockquote><p>Returns the pathname used for <code>output-file</code> by <code>document-package</code> when called
+with the same arguments. 
+</p></blockquote></div>
+
+   <p><a name="index-generate_002dincludes-5"></a><a name="Function-generate_002dincludes"></a>
+
+<div class="defun">
+&mdash; Function: <b>generate-includes</b><var> directory packages &amp;key base-package<a name="index-generate_002dincludes-6"></a></var><br>
 <blockquote><p>Create files in <code>directory</code> containing Texinfo markup of all docstrings of
 each exported symbol in <code>packages</code>. The <code>directory</code> is created if it does not
 exist yet. Trailing slash is required.
@@ -220,6 +228,7 @@ Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
 
 <ul class="index-fn" compact>
 <li><a href="#index-document_002dpackage-1"><code>document-package</code></a>: <a href="#Dictionary">Dictionary</a></li>
-<li><a href="#index-generate_002dincludes-3"><code>generate-includes</code></a>: <a href="#Dictionary">Dictionary</a></li>
+<li><a href="#index-document_002dpackage_002dpathname-3"><code>document-package-pathname</code></a>: <a href="#Dictionary">Dictionary</a></li>
+<li><a href="#index-generate_002dincludes-5"><code>generate-includes</code></a>: <a href="#Dictionary">Dictionary</a></li>
    </ul></body></html>
 
