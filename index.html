@@ -1,1 +1,225 @@
-SB-TEXINFO
+<html lang="en">
+<head>
+<title>SB-TEXINFO</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name="description" content="SB-TEXINFO">
+<meta name="generator" content="makeinfo 4.13">
+<link title="Top" rel="top" href="#Top">
+<link href="http://www.gnu.org/software/texinfo/" rel="generator-home" title="Texinfo Homepage">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css"><!--
+  pre.display { font-family:inherit }
+  pre.format  { font-family:inherit }
+  pre.smalldisplay { font-family:inherit; font-size:smaller }
+  pre.smallformat  { font-family:inherit; font-size:smaller }
+  pre.smallexample { font-size:smaller }
+  pre.smalllisp    { font-size:smaller }
+  span.sc    { font-variant:small-caps }
+  span.roman { font-family:serif; font-weight:normal; } 
+  span.sansserif { font-family:sans-serif; font-weight:normal; } 
+.node { visibility:hidden; height: 0px; }
+  .menu { visibility:hidden; height: 0px; }
+  .appendix { background-color:#a4bbff; padding: 0.2em; }
+  .chapter { background-color:#a4bbff; padding: 0.2em; }
+  .section { background-color:#a4bbff; padding: 0.2em; }
+  .settitle { background-color:#a4bbff; }
+  .contents { border: 2px solid black;
+              margin: 1cm 1cm 1cm 1cm;
+              padding-left: 3mm; }
+  .lisp { padding: 0; margin: 0em; }
+  body { padding: 2em 8em; font-family: sans-serif; }
+  h1 { padding: 1em; text-align: center; }
+  li { margin: 1em; }
+
+--></style>
+</head>
+<body>
+<h1 class="settitle">SB-TEXINFO</h1>
+<div class="node">
+<a name="Top"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#dir">(dir)</a>
+
+</div>
+
+<h2 class="unnumbered">Introduction</h2>
+
+<p><span class="sc">sb-texinfo</span> converts Common Lisp documentation strings for inclusion in
+a Texinfo manual&mdash;which can then be converted into eg. HTML and PDF.
+
+   <p>While current implementation is SBCL-only, there is no fundamental
+reason why support for other Common Lisps could not be added.
+
+   <p><span class="sc">sb-texinfo</span> was originally written for processing the SBCL docstrings
+by Rudi Sclatte in 2004, and has been maintained as part of SBCL since
+then. This version was split from the SBCL sources in 2011 in order to
+generalize it for documenting other software.
+
+<!-- Version control -->
+   <p><span class="sc">sb-texinfo</span> is maintained in Git:
+<pre class="example">     git clone git://github.com/nikodemus/sb-texinfo.git
+</pre>
+   <p>will get you a local copy.
+<pre class="example">     <a href="http://github.com/nikodemus/sb-texinfo/">http://github.com/nikodemus/sb-texinfo/</a>
+</pre>
+   <p>is the GitHub project page, where the issue tracker is located.
+
+<div class="contents">
+<h2>Table of Contents</h2>
+<ul>
+<li><a name="toc_Top" href="#Top">Introduction</a>
+<li><a name="toc_Overview" href="#Overview">1 Overview</a>
+<li><a name="toc_Examples" href="#Examples">2 Examples</a>
+<ul>
+<li><a href="#Examples">2.1 <span class="sc">sb-texinfo</span> Documented Using <code>generate-includes</code></a>
+<li><a href="#Examples">2.2 <span class="sc">sb-texinfo</span> Documented Using <code>document-package</code></a>
+</li></ul>
+<li><a name="toc_Dictionary" href="#Dictionary">3 Dictionary</a>
+<li><a name="toc_Function-Index" href="#Function-Index">Appendix A Function Index</a>
+</li></ul>
+</div>
+
+<ul class="menu">
+<li><a accesskey="1" href="#Overview">Overview</a>
+<li><a accesskey="2" href="#Examples">Examples</a>
+<li><a accesskey="3" href="#Dictionary">Dictionary</a>
+<li><a accesskey="4" href="#Function-Index">Function Index</a>
+</ul>
+
+<div class="node">
+<a name="Overview"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Examples">Examples</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Top">Top</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">1 Overview</h2>
+
+<p>There are two main ways of using <span class="sc">sb-texinfo</span>
+
+     <ul>
+<li><strong>The Right Way:</strong>
+The recommended way is to write a manual in Texinfo, and use the
+@include directive to include processed docstrings generated using
+<a href="#Function-generate_002dincludes"><code>generate-includes</code></a>.
+
+     <li><strong>Quick and Dirty:</strong>
+Call <a href="#Function-document_002dpackage"><code>document-package</code></a> with the name of the package or
+packages to document. This will produce a texinfo file containing
+extracted documentation for the project.
+
+     <p>This can be a convenient way to produce a template for further
+development using the first method, and perhaps more importantly
+quickly allows you to generate reference documentation for packages
+with docstrings but no manual.
+
+   </ul>
+
+<div class="node">
+<a name="Examples"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Dictionary">Dictionary</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Overview">Overview</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">2 Examples</h2>
+
+<h3 class="section">2.1 <span class="sc">sb-texinfo</span> Documented Using <code>generate-includes</code></h3>
+
+<p>This manual is produced using the <a href="#Function-generate_002dincludes"><code>generate-includes</code></a> method. 
+<samp><span class="file">sb-texinfo.texinfo</span></samp> is the main Texinfo source file, where
+docstrings are included.
+
+<pre class="example">     <a href="https://raw.github.com/nikodemus/sb-texinfo/master/doc/sb-texinfo.texinfo">https://raw.github.com/nikodemus/sb-texinfo/master/doc/sb-texinfo.texinfo</a>
+</pre>
+   <p>A <samp><span class="file">Makefile</span></samp> is responsible for running SBCL and the Texinfo toolchain.
+
+<pre class="example">     <a href="https://raw.github.com/nikodemus/sb-texinfo/master/doc/Makefile">https://raw.github.com/nikodemus/sb-texinfo/master/doc/Makefile</a>
+</pre>
+   <p>Finally, <samp><span class="file">style.css</span></samp> is used to prettify the HTML version.
+
+<pre class="example">     <a href="https://raw.github.com/nikodemus/sb-texinfo/master/doc/style.css">https://raw.github.com/nikodemus/sb-texinfo/master/doc/style.css</a>
+</pre>
+   <h3 class="section">2.2 <span class="sc">sb-texinfo</span> Documented Using <code>document-package</code></h3>
+
+<p>An alternate version of this manual, produced using
+
+<pre class="lisp">     (sb-texinfo:document-package :sb-texinfo
+                                  :output-file "document-package-sample.texinfo-tmp")
+</pre>
+   <p>and further processed using the <samp><span class="file">Makefile</span></samp> linked above:
+<a href="document-package-sample.html">document-package-sample.html</a>.
+
+<div class="node">
+<a name="Dictionary"></a>
+<p><hr>
+Next:&nbsp;<a rel="next" accesskey="n" href="#Function-Index">Function Index</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Examples">Examples</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="chapter">3 Dictionary</h2>
+
+<p><a name="index-document_002dpackage-1"></a><a name="Function-document_002dpackage"></a>
+
+<div class="defun">
+&mdash; Function: <b>document-package</b><var> package &amp;key output-file standalone title<a name="index-document_002dpackage-2"></a></var><br>
+<blockquote><p>Creates Texinfo documentation for <code>package</code> in <code>output-file</code>, which defaults to
+the &lt;shortest-package-name&gt;.texinfo. Returns the pathname of the created file
+as the primary value. An "include/" directory is created in the same
+location as the Texinfo file, which contains parts included in the Texinfo
+file.
+
+        <p>If <code>standalone</code> is true (the default), a standalone Texinfo file is created. 
+Otherwise a file suitable for including in other Texinfo files is created.
+
+        <p>The <code>title</code> is used for the documentation, defaulting to capitalized shortest
+package name.
+
+        <p>The generated Texinfo uses include files generated by <code>generate-includes</code>,
+making this function a convenient way to generate an initial template
+for a manually maintained Texinfo manual. 
+</p></blockquote></div>
+
+   <p><a name="index-generate_002dincludes-3"></a><a name="Function-generate_002dincludes"></a>
+
+<div class="defun">
+&mdash; Function: <b>generate-includes</b><var> directory packages &amp;key base-package<a name="index-generate_002dincludes-4"></a></var><br>
+<blockquote><p>Create files in <code>directory</code> containing Texinfo markup of all docstrings of
+each exported symbol in <code>packages</code>. The <code>directory</code> is created if it does not
+exist yet. Trailing slash is required.
+
+        <p>The names of the generated files are of the form
+
+     <pre class="lisp">              &lt;doc-type&gt;-&lt;packagename&gt;-&lt;symbol-name&gt;.texinfo
+</pre>
+        <p>and can be included in Texinfo source via @include statements. Texinfo
+syntax-significant characters are escaped in symbol names, but if a docstring
+contains invalid Texinfo markup, you lose. 
+</p></blockquote></div>
+
+<div class="node">
+<a name="Function-Index"></a>
+<p><hr>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="#Dictionary">Dictionary</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="#Top">Top</a>
+
+</div>
+
+<!-- node-name,  next,  previous,  up -->
+<h2 class="appendix">Appendix A Function Index</h2>
+
+<ul class="index-fn" compact>
+<li><a href="#index-document_002dpackage-1"><code>document-package</code></a>: <a href="#Dictionary">Dictionary</a></li>
+<li><a href="#index-generate_002dincludes-3"><code>generate-includes</code></a>: <a href="#Dictionary">Dictionary</a></li>
+   </ul></body></html>
+
