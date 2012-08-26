@@ -24,7 +24,7 @@
 
 @include include/sb-texinfo.texinfo
 
-@node Top
+@node Top, Overview, (dir), (dir)
 @top Introduction
 
 @project converts Common Lisp documentation strings for inclusion in
@@ -53,13 +53,14 @@ is the GitHub project page, where the issue tracker is located.
 @contents
 
 @menu
-* Overview::                    
-* Examples::                    
-* Dictionary::                  
+* Overview::
+* Docstrings::
+* Examples::
+* Dictionary::
 * Function Index::
 @end menu
 
-@node Overview
+@node Overview, Docstrings, Top, Top
 @comment  node-name,  next,  previous,  up
 @chapter Overview
 
@@ -69,10 +70,10 @@ There are two main ways of using @project
 
 @item @strong{The Right Way:}
 The recommended way is to write a manual in Texinfo, and use the
-@@include directive to include processed docstrings generated using
+@code{@@include} directive to include processed docstrings generated using
 @reffun{generate-includes}.
 
-@item @strong{Quick and Dirty:} 
+@item @strong{Quick and Dirty:}
 Call @reffun{document-package} with the name of the package or
 packages to document. This will produce a Texinfo file containing
 extracted documentation for the project.
@@ -84,7 +85,102 @@ with docstrings but no manual.
 
 @end itemize
 
-@node Examples
+@node Docstrings, Examples, Overview, Top
+@comment  node-name,  next,  previous,  up
+@chapter Docstrings
+
+The documentation is generated out of the docstrings of exported symbols.
+The docstrings are used mostly as is, except for the following conversions
+
+@itemize
+@item Special Characters, such as @code{@@}, @code{@{} and @code{@}} are escaped so
+      they are not mangled by texinfo.
+@item @code{ALL-CAPS} words that name a symbol are included as a @code{@@code@{all-caps@}}
+      so they are formatted nicely.
+@item It tries to recognize unnumbered lists and output an @code{@@itemize} block containing
+      the itemized entries.
+@item It tries to recognize lisp code blocks and puts them in @code{@@lisp} blocks.
+@end itemize
+
+@menu
+* Itemized Lists::
+* Lisp Code::
+@end menu
+
+@node Itemized Lists, Lisp Code, Docstrings, Docstrings
+@comment  node-name,  next,  previous,  up
+@section Itemized Lists
+
+A section in the docstring is an item when it starts with either
+@code{-} or @code{*} followed by a space.  All subsequent lines which
+are indented more than the @code{-} or @code{*} are considered part of the item.
+Empty lines are include in an item.
+
+When a line is encountered that is indented less than or the same as the previous
+@code{-} or @code{*},
+which does not mark a new item, all items collected are put in an @code{@@itemize} section.
+
+Each item itself is scanned for subitems.  An item is recognized as a subitem
+if the indentation level is higher than the current item.
+
+It is not possible to include Lisp Code examples in an item.
+
+In the exaple below, all @code{-} are recognized as toplevel items and the
+@code{*} are recognized as sub items.  Note that ony the identation matters,
+so both could have been marked by the same character.
+
+@lisp
+Below we itemize 2 top level items
+- The first case is about subitems
+
+  Sub items are recognized by a higher indentation like this:
+  * Sub 1
+  * Sub 2
+  This line is still part of the first toplevel item
+
+- Second toplevel item
+
+This is not part anymore of the itemized list.
+@end lisp
+
+
+@node Lisp Code,  , Itemized Lists, Docstrings
+@comment  node-name,  next,  previous,  up
+@section Lisp Code
+
+A section in the docstring is recognized as a lisp section if
+@itemize
+@item It starts and end with an empty line.
+@item The first non space character after the opening empty line
+      is one of @code{(}, @code{;} or @code{<}.
+@item The section is ended with the first empty line it encounters unless
+      the next lines first non whitespace character is again one of
+      @code{(}, @code{;} or @code{<}.
+@end itemize
+
+The exception in the last clause is there so an empty line in the middle
+of lisp code is recognized.
+
+So it will recognize the definition of @code{fib} in the following example:
+
+@lisp
+So for example
+
+(defun fib (n)
+   "A buggy implementation of the Fibonacci function"
+   (cond
+   ;; Easy cases
+      ((= 0 n) 0)
+      ((= 1 n) 1)
+
+   ;; Generic case
+      (t (+ (fib (- n 1)) (fib (- n 2))))))
+
+And this is normal text again.
+@end lisp
+
+
+@node Examples, Dictionary, Docstrings, Top
 @comment  node-name,  next,  previous,  up
 @chapter Examples
 
@@ -135,7 +231,7 @@ and further processed using the @file{Makefile} linked above:
 @url{http://nikodemus.github.com/sb-texinfo/document-package-sample.pdf}
 @end example
 
-@node Dictionary
+@node Dictionary,Function Index , Examples, Top
 @comment  node-name,  next,  previous,  up
 @chapter Dictionary
 
