@@ -780,7 +780,7 @@ followed another tabulation label or a tabulation body."
             ;; sbcl.texinfo defines macros that expand @&key and friends to &key.
             (mapcar (lambda (name)
                       (if (member name lambda-list-keywords)
-                          (format nil "@~A" name)
+                          (format nil "@amp-~A" (remove #\& (symbol-name name)))
                           name))
                     (lambda-list doc)))))
 
@@ -904,19 +904,19 @@ package, as well as for the package itself."
   ;; define them for info as well.
   (write-line "
 @ifnottex
-@macro &allow-other-keys
+@macro amp-allow-other-keys
 &allow-other-keys
 @end macro
-@macro &optional
+@macro amp-optional
 &optional
 @end macro
-@macro &rest
+@macro amp-rest
 &rest
 @end macro
-@macro &key
+@macro amp-key
 &key
 @end macro
-@macro &body
+@macro amp-body
 &body
 @end macro
 @end ifnottex"
