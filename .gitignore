@@ -1,1 +1,11 @@
 web
+*.aux
+*.fn
+*.fns
+*.log
+document-package-sample.*
+sb-texinfo.pdf
+sb-texinfo.toc
+doc/include-stamp
+doc/include/*.texinfo
+
