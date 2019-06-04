@@ -9,3 +9,5 @@ sb-texinfo.toc
 doc/include-stamp
 doc/include/*.texinfo
 
+
+*.fasl
