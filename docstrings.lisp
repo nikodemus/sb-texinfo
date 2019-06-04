@@ -916,27 +916,6 @@ package, as well as for the package itself."
 @c MACHINE GENERATED FILE! Do not edit by hand!
 @c See SB-TEXINFO for details."
               *texinfo-output*)
-  ;; We use @&key, etc to escape & from TeX in lambda lists -- so we need to
-  ;; define them for info as well.
-  (write-line "
-@ifnottex
-@macro &allow-other-keys
-&allow-other-keys
-@end macro
-@macro &optional
-&optional
-@end macro
-@macro &rest
-&rest
-@end macro
-@macro &key
-&key
-@end macro
-@macro &body
-&body
-@end macro
-@end ifnottex"
-              *texinfo-output*)
   ;; Some index prettification helper macros, for tricking the texindex
   ;; collation engine
   (write-line "
