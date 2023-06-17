@@ -95,7 +95,7 @@ you deserve to lose.")
   (cond ((null list)
          nil)
         ((consp (car list))
-         (nconc (flatten (car list)) (flatten (cdr list))))
+         (append (flatten (car list)) (flatten (cdr list))))
         ((null (cdr list))
          (cons (car list) nil))
         (t
@@ -505,7 +505,7 @@ with #\@. Optionally downcase the result."
            (when (and begin (or (> i (1+ begin))
                                 (not (member (char line begin) '(#\A #\I)))))
              (grab begin i))
-           (nreverse result))
+           (reverse result))
         (cond
           ((and begin (find (char line i) *symbol-delimiters*))
            ;; symbol end; remember it if it's not "A" or "I"
@@ -613,7 +613,7 @@ an item in an itemization."
                (when sub-lines-consumed
                  (incf line-number (1- sub-lines-consumed)) ; +1 on next loop
                  (incf lines-consumed sub-lines-consumed)
-                 (setf result (nconc (nreverse sub-itemization) result)))))
+                 (setf result (append (reverse sub-itemization) result)))))
             ((and offset (= indentation this-offset))
              ;; start of new item
              (push (format nil "@item ~A"
@@ -881,8 +881,8 @@ are removed and added as toplevel entries to the list.  This happens recursively
   "Collects all docs for a SYMBOL and (SETF SYMBOL), returns a list of
 the form DOC instances. See `*documentation-types*' for the possible
 values of doc-type."
-  (nconc (collect-name-documentation symbol)
-         (collect-name-documentation (list 'setf symbol))))
+  (append (collect-name-documentation symbol)
+          (collect-name-documentation (list 'setf symbol))))
 
 (defun collect-documentation (package &key no-package flatten extra-symbols)
   "Collects all documentation for all external symbols of the given
@@ -894,10 +894,10 @@ although their accessors are."
          (docs nil))
     (check-type package package)
     (do-external-symbols (symbol package)
-      (setf docs (nconc (collect-symbol-documentation symbol) docs)))
+      (setf docs (append (collect-symbol-documentation symbol) docs)))
     (dolist (symbol extra-symbols)
       (when (eq (symbol-package symbol) package)
-        (setf docs (nconc (collect-symbol-documentation symbol) docs))))
+        (setf docs (append (collect-symbol-documentation symbol) docs))))
     (let ((doc (unless no-package
                  (maybe-documentation *documentation-package* t))))
       (when doc
